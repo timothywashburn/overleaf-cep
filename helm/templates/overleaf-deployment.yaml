@@ -56,6 +56,8 @@ spec:
           value: "standard"
         - name: DOCKER_RUNNER_PULL_IMAGES
           value: "false"
+        - name: DOCKER_HOST
+          value: "tcp://localhost:2375"
         envFrom:
         - secretRef:
             name: overleaf-secret
