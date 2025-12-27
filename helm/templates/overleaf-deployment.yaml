@@ -112,4 +112,5 @@ spec:
         persistentVolumeClaim:
           claimName: overleaf-pvc
       - name: docker-storage
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: docker-pvc

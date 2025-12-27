@@ -14,3 +14,7 @@ redis:
 overleaf:
   storage:
     size: 10Gi
+
+docker:
+  storage:
+    size: 10Gi
