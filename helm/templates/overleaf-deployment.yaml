@@ -55,7 +55,7 @@ spec:
         - name: ALLOWED_COMPILE_GROUPS
           value: "standard"
         - name: DOCKER_RUNNER_PULL_IMAGES
-          value: "false"
+          value: "true"
         - name: DOCKER_HOST
           value: "tcp://localhost:2375"
         envFrom:
