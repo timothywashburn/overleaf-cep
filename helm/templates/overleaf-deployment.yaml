@@ -60,6 +60,26 @@ spec:
           value: "texlive/texlive:latest"
         - name: DOCKER_HOST
           value: "tcp://localhost:2375"
+        {{- if .Values.oidc.enabled }}
+        - name: EXTERNAL_AUTH
+          value: "oidc"
+        - name: OVERLEAF_OIDC_ISSUER
+          value: "https://{{ .Values.oidc.authDomain }}/application/o/overleaf/"
+        - name: OVERLEAF_OIDC_AUTHORIZATION_URL
+          value: "https://{{ .Values.oidc.authDomain }}/application/o/authorize/"
+        - name: OVERLEAF_OIDC_TOKEN_URL
+          value: "https://{{ .Values.oidc.authDomain }}/application/o/token/"
+        - name: OVERLEAF_OIDC_USER_INFO_URL
+          value: "https://{{ .Values.oidc.authDomain }}/application/o/userinfo/"
+        - name: OVERLEAF_OIDC_CLIENT_ID
+          value: "{{ .Values.oidc.clientId }}"
+        - name: OVERLEAF_OIDC_CLIENT_SECRET
+          value: "{{ .Values.oidc.clientSecret }}"
+        - name: OVERLEAF_OIDC_PROVIDER_NAME
+          value: "{{ .Values.oidc.provider }}"
+        - name: OVERLEAF_OIDC_SCOPE
+          value: "openid profile email"
+        {{- end }}
         envFrom:
         - secretRef:
             name: overleaf-secret

@@ -2,6 +2,13 @@ ingress:
   host:
   ingressClassName: traefik
 
+oidc:
+  enabled: false
+  provider: Authentik
+  authDomain:
+  clientId:
+  clientSecret:
+
 mongodb:
   port:
   storage:
