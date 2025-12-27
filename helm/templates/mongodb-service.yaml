@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: mongodb
 spec:
-  clusterIP: None  # Headless service for StatefulSet
+  clusterIP: None
   ports:
   - port: 27017
     targetPort: 27017

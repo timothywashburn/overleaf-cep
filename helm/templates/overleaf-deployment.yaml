@@ -29,9 +29,9 @@ spec:
         - name: OVERLEAF_MONGO_URL
           value: "mongodb://mongodb-0.mongodb:27017/sharelatex"
         - name: OVERLEAF_REDIS_HOST
-          value: "redis-service"
+          value: "redis-0.redis"
         - name: REDIS_HOST
-          value: "redis-service"
+          value: "redis-0.redis"
         - name: ENABLED_LINKED_FILE_TYPES
           value: "project_file,project_output_file"
         - name: ENABLE_CONVERSIONS
@@ -54,8 +54,10 @@ spec:
           value: "texlive/texlive:latest"
         - name: ALLOWED_COMPILE_GROUPS
           value: "standard"
-        - name: DOCKER_RUNNER_PULL_IMAGES
-          value: "true"
+        - name: ALLOWED_IMAGES
+          value: "texlive/texlive:latest"
+        - name: ALL_TEX_LIVE_DOCKER_IMAGES
+          value: "texlive/texlive:latest"
         - name: DOCKER_HOST
           value: "tcp://localhost:2375"
         envFrom:
@@ -95,6 +97,19 @@ spec:
         env:
           - name: DOCKER_TLS_CERTDIR
             value: ""
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - sh
+              - -c
+              - |
+                until docker info >/dev/null 2>&1; do
+                  echo "Waiting for Docker daemon..."
+                  sleep 2
+                done
+                echo "Docker daemon ready, pulling texlive/texlive:latest..."
+                docker pull texlive/texlive:latest || echo "Failed to pull image, will retry on next pod start"
         volumeMounts:
           - name: docker-storage
             mountPath: /var/lib/docker

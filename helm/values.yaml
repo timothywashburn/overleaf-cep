@@ -5,15 +5,15 @@ ingress:
 mongodb:
   port:
   storage:
-    size: 10Gi
+    size: 1Gi
 
 redis:
   storage:
-    size: 1Gi
+    size: 0.5Gi
 
 overleaf:
   storage:
-    size: 10Gi
+    size: 1Gi
 
 docker:
   storage:
