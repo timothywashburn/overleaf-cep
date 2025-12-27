@@ -65,6 +65,14 @@ spec:
           value: "true"
         - name: SANDBOXED_COMPILES_SIBLING_CONTAINERS
           value: "true"
+        - name: TEX_LIVE_DOCKER_IMAGE
+          value: "texlive/texlive:latest"
+        - name: TEXLIVE_IMAGE
+          value: "texlive/texlive:latest"
+        - name: ALLOWED_COMPILE_GROUPS
+          value: "standard"
+        - name: DOCKER_RUNNER_PULL_IMAGES
+          value: "false"
         envFrom:
         - secretRef:
             name: overleaf-secret
