@@ -98,6 +98,8 @@ spec:
         volumeMounts:
           - name: docker-storage
             mountPath: /var/lib/docker
+          - name: overleaf-storage
+            mountPath: /var/lib/overleaf
         resources:
           requests:
             memory: "512Mi"
