@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongodb-init-replicaset
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: mongo-init
+        image: mongo:6.0
+        command:
+        - mongosh
+        - mongodb-0.mongodb:27017/admin
+        - --eval
+        - |
+          try {
+            rs.status();
+            print("Replica set already initialized");
+          } catch (err) {
+            print("Initializing replica set...");
+            rs.initiate({
+              _id: "overleaf",
+              members: [{ _id: 0, host: "mongodb-0.mongodb:27017" }]
+            });
+            print("Replica set initialized successfully");
+          }

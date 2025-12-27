@@ -1,8 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: mongodb
 spec:
+  serviceName: mongodb
   replicas: 1
   selector:
     matchLabels:
@@ -19,17 +20,16 @@ spec:
         - mongod
         - "--replSet"
         - "overleaf"
+        - "--bind_ip_all"
         ports:
         - containerPort: 27017
-        envFrom:
-        - configMapRef:
-            name: mongodb-config
+          name: mongodb
+        env:
+        - name: MONGO_INITDB_DATABASE
+          value: "sharelatex"
         volumeMounts:
-        - name: mongodb-storage
+        - name: mongodb-data
           mountPath: /data/db
-        - name: mongodb-init
-          mountPath: /docker-entrypoint-initdb.d/mongodb-init-replica-set.js
-          subPath: mongodb-init-replica-set.js
         resources:
           requests:
             memory: "1Gi"
@@ -41,26 +41,25 @@ spec:
           exec:
             command:
             - mongosh
-            - --quiet
             - --eval
-            - "db.stats().ok"
+            - "db.adminCommand('ping')"
           initialDelaySeconds: 30
-          periodSeconds: 30
-          timeoutSeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
         readinessProbe:
           exec:
             command:
             - mongosh
-            - --quiet
             - --eval
-            - "db.stats().ok"
+            - "db.adminCommand('ping')"
           initialDelaySeconds: 10
-          periodSeconds: 10
-          timeoutSeconds: 5
-      volumes:
-      - name: mongodb-storage
-        persistentVolumeClaim:
-          claimName: mongodb-pvc
-      - name: mongodb-init
-        configMap:
-          name: mongodb-init
+          periodSeconds: 5
+          timeoutSeconds: 3
+  volumeClaimTemplates:
+  - metadata:
+      name: mongodb-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.mongodb.storage.size }}
