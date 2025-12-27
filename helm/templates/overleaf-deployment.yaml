@@ -51,15 +51,15 @@ spec:
         - name: SANDBOXED_COMPILES_SIBLING_CONTAINERS
           value: "true"
         - name: TEX_LIVE_DOCKER_IMAGE
-          value: "texlive/texlive@sha256:8135852e5c945a3829cec6057c4feb32571081c9034fdb380d904006cde7c590"
+          value: "texlive/texlive@sha256:aa6bf7be89bd1cd9b0b1cda65307dba1e3305cd8c2bb5bae9d245b6766f209e5"
         - name: TEXLIVE_IMAGE
-          value: "texlive/texlive@sha256:8135852e5c945a3829cec6057c4feb32571081c9034fdb380d904006cde7c590"
+          value: "texlive/texlive@sha256:aa6bf7be89bd1cd9b0b1cda65307dba1e3305cd8c2bb5bae9d245b6766f209e5"
         - name: ALLOWED_COMPILE_GROUPS
           value: "standard"
         - name: ALLOWED_IMAGES
-          value: "texlive/texlive@sha256:8135852e5c945a3829cec6057c4feb32571081c9034fdb380d904006cde7c590"
+          value: "texlive/texlive@sha256:aa6bf7be89bd1cd9b0b1cda65307dba1e3305cd8c2bb5bae9d245b6766f209e5"
         - name: ALL_TEX_LIVE_DOCKER_IMAGES
-          value: "texlive/texlive@sha256:8135852e5c945a3829cec6057c4feb32571081c9034fdb380d904006cde7c590"
+          value: "texlive/texlive@sha256:aa6bf7be89bd1cd9b0b1cda65307dba1e3305cd8c2bb5bae9d245b6766f209e5"
         - name: DOCKER_HOST
           value: "tcp://localhost:2375"
         {{- if .Values.oidc.enabled }}
@@ -135,7 +135,7 @@ spec:
                   sleep 2
                 done
                 echo "Docker daemon ready, pulling texlive..."
-                docker pull texlive/texlive@sha256:8135852e5c945a3829cec6057c4feb32571081c9034fdb380d904006cde7c590 || echo "Failed to pull image, will retry on next pod start"
+                docker pull texlive/texlive@sha256:aa6bf7be89bd1cd9b0b1cda65307dba1e3305cd8c2bb5bae9d245b6766f209e5 || echo "Failed to pull image, will retry on next pod start"
         volumeMounts:
           - name: docker-storage
             mountPath: /var/lib/docker
