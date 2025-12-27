@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:6.0
+        command:
+        - mongod
+        - "--replSet"
+        - "overleaf"
+        ports:
+        - containerPort: 27017
+        envFrom:
+        - configMapRef:
+            name: mongodb-config
+        volumeMounts:
+        - name: mongodb-storage
+          mountPath: /data/db
+        - name: mongodb-init
+          mountPath: /docker-entrypoint-initdb.d/mongodb-init-replica-set.js
+          subPath: mongodb-init-replica-set.js
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          exec:
+            command:
+            - mongosh
+            - --quiet
+            - --eval
+            - "db.stats().ok"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - mongosh
+            - --quiet
+            - --eval
+            - "db.stats().ok"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+      volumes:
+      - name: mongodb-storage
+        persistentVolumeClaim:
+          claimName: mongodb-pvc
+      - name: mongodb-init
+        configMap:
+          name: mongodb-init

@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overleaf
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: overleaf
+  template:
+    metadata:
+      labels:
+        app: overleaf
+    spec:
+      imagePullSecrets:
+      - name: dockerhub-registry
+      containers:
+      - name: overleaf
+        image: {{ .Values.image.overleaf.name }}:{{ .Values.image.overleaf.tag | default "latest" }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: OVERLEAF_APP_NAME
+          value: "Overleaf Extended Community Edition"
+        - name: OVERLEAF_MONGO_URL
+          value: "mongodb://mongodb-service:27017/sharelatex"
+        - name: OVERLEAF_REDIS_HOST
+          value: "redis-service"
+        - name: REDIS_HOST
+          value: "redis-service"
+        - name: ENABLED_LINKED_FILE_TYPES
+          value: "project_file,project_output_file"
+        - name: ENABLE_CONVERSIONS
+          value: "true"
+        - name: EMAIL_CONFIRMATION_DISABLED
+          value: "true"
+        - name: SANDBOXED_COMPILES
+          value: "true"
+        - name: SANDBOXED_COMPILES_HOST_DIR_COMPILES
+          value: "/var/lib/overleaf/data/compiles"
+        - name: SANDBOXED_COMPILES_HOST_DIR_OUTPUT
+          value: "/var/lib/overleaf/data/output"
+        - name: DOCKER_RUNNER
+          value: "true"
+        - name: SANDBOXED_COMPILES_SIBLING_CONTAINERS
+          value: "true"
+        envFrom:
+        - secretRef:
+            name: overleaf-secret
+            optional: true
+        volumeMounts:
+        - name: overleaf-storage
+          mountPath: /var/lib/overleaf
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+      volumes:
+      - name: overleaf-storage
+        persistentVolumeClaim:
+          claimName: overleaf-pvc
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket

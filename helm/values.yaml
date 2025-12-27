@@ -1,0 +1,16 @@
+ingress:
+  host:
+  ingressClassName: traefik
+
+mongodb:
+  port:
+  storage:
+    size: 1Gi
+
+redis:
+  storage:
+    size: 1Gi
+
+overleaf:
+  storage:
+    size: 1Gi
