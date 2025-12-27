@@ -18,6 +18,23 @@ spec:
       imagePullSecrets:
       - name: dockerhub-registry
       containers:
+      - name: docker-dind
+        image: docker:dind
+        securityContext:
+          privileged: true
+        env:
+        - name: DOCKER_TLS_CERTDIR
+          value: ""
+        volumeMounts:
+        - name: docker-storage
+          mountPath: /var/lib/docker
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
       - name: overleaf
         image: {{ .Values.image.overleaf.name }}:{{ .Values.image.overleaf.tag | default "latest" }}
         imagePullPolicy: Always
@@ -55,8 +72,8 @@ spec:
         volumeMounts:
         - name: overleaf-storage
           mountPath: /var/lib/overleaf
-        - name: docker-socket
-          mountPath: /var/run/docker.sock
+        - name: docker-storage
+          mountPath: /var/run
         resources:
           requests:
             memory: "2Gi"
@@ -82,7 +99,5 @@ spec:
       - name: overleaf-storage
         persistentVolumeClaim:
           claimName: overleaf-pvc
-      - name: docker-socket
-        hostPath:
-          path: /var/run/docker.sock
-          type: Socket
+      - name: docker-storage
+        emptyDir: {}
