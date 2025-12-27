@@ -47,7 +47,7 @@ metadata:
 spec:
   secretName: overleaf-tls
   issuerRef:
-    name: letsencrypt-prod
+    name: letsencrypt-staging
     kind: ClusterIssuer
   dnsNames:
     - {{ .Values.ingress.host }}
