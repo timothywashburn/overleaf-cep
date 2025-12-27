@@ -83,8 +83,8 @@ spec:
           value: "{{ .Values.oidc.provider }}"
         - name: OVERLEAF_OIDC_SCOPE
           value: "openid profile email"
-        - name: OVERLEAF_OIDC_USER_ID_FIELD
-          value: "sub"
+{{/*        - name: OVERLEAF_OIDC_USER_ID_FIELD*/}}
+{{/*          value: "sub"*/}}
         {{- end }}
         envFrom:
         - secretRef:
