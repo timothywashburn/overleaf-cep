@@ -4,7 +4,7 @@ ingress:
 
 oidc:
   enabled: false
-  provider: Authentik
+  provider:
   authDomain:
   clientId:
   clientSecret:

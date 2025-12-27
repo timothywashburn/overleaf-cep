@@ -71,6 +71,8 @@ spec:
           value: "https://{{ .Values.oidc.authDomain }}/application/o/token/"
         - name: OVERLEAF_OIDC_USER_INFO_URL
           value: "https://{{ .Values.oidc.authDomain }}/application/o/userinfo/"
+        - name: OVERLEAF_OIDC_LOGOUT_URL
+          value: "https://{{ .Values.oidc.authDomain }}/application/o/overleaf/end-session/"
         - name: OVERLEAF_OIDC_CLIENT_ID
           value: "{{ .Values.oidc.clientId }}"
         - name: OVERLEAF_OIDC_CLIENT_SECRET
