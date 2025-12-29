@@ -98,10 +98,10 @@ spec:
         resources:
           requests:
             memory: "2Gi"
-            cpu: "1000m"
+            cpu: "100m"
           limits:
             memory: "4Gi"
-            cpu: "2000m"
+            cpu: "250m"
         livenessProbe:
           httpGet:
             path: /
@@ -144,10 +144,10 @@ spec:
         resources:
           requests:
             memory: "512Mi"
-            cpu: "250m"
+            cpu: "100m"
           limits:
             memory: "1Gi"
-            cpu: "500m"
+            cpu: "1000m"
       volumes:
       - name: overleaf-storage
         persistentVolumeClaim:
