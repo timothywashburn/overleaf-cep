@@ -14,7 +14,7 @@ spec:
         image: mongo:8.2
         command:
         - mongosh
-        - mongodb-0.mongodb-service:27017/admin
+        - mongodb-0.mongodb-service.{{ .Release.Namespace }}.svc.cluster.local:27017/admin
         - --eval
         - |
           try {
@@ -24,7 +24,7 @@ spec:
             print("Initializing replica set...");
             rs.initiate({
               _id: "overleaf",
-              members: [{ _id: 0, host: "mongodb-0.mongodb-service:27017" }]
+              members: [{ _id: 0, host: "mongodb-0.mongodb-service.{{ .Release.Namespace }}.svc.cluster.local:27017" }]
             });
             print("Replica set initialized successfully");
           }
