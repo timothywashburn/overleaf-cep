@@ -29,11 +29,11 @@ spec:
         - name: OVERLEAF_SITE_URL
           value: "https://{{ .Values.ingress.host }}"
         - name: OVERLEAF_MONGO_URL
-          value: "mongodb://mongodb-0.mongodb:27017/sharelatex"
+          value: "mongodb://mongodb-0.mongodb-service:27017/sharelatex"
         - name: OVERLEAF_REDIS_HOST
-          value: "redis-0.redis"
+          value: "redis-0.redis-service"
         - name: REDIS_HOST
-          value: "redis-0.redis"
+          value: "redis-0.redis-service"
         - name: ENABLED_LINKED_FILE_TYPES
           value: "project_file,project_output_file"
         - name: ENABLE_CONVERSIONS
