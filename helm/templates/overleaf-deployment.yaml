@@ -15,8 +15,6 @@ spec:
       labels:
         app: overleaf
     spec:
-      imagePullSecrets:
-      - name: dockerhub-registry
       containers:
       - name: overleaf
         image: {{ .Values.image.overleaf.name }}:{{ .Values.image.overleaf.tag | default "latest" }}
