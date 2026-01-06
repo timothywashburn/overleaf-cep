@@ -12,10 +12,12 @@ oidc:
 mongodb:
   port:
   storage:
+    volumeName: ""
     size: 1Gi
 
 redis:
   storage:
+    volumeName: ""
     size: 0.5Gi
 
 overleaf:
